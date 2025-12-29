@@ -1,6 +1,6 @@
 // Import required modules
 var express = require('express');
-var mysql = require('mysql');
+const mysql = require('mysql2');
 var app = express();
 var bodyParser = require('body-parser');
 const cors = require('cors');
@@ -11,13 +11,27 @@ app.use(cors());
 // Create a JSON parser 
 var jsonParser = bodyParser.json();
 
-// Create a connection specifying database connection details
+
+
+// MODIFICATION ICI : On utilise process.env pour lire les infos du serveur
 const conn = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "todo"
+    host: process.env.DB_HOST || "localhost",      // L'adresse RDS sera injectée ici
+    user: process.env.DB_USER || "root",           // "admin" sera injecté ici
+    password: process.env.DB_PASSWORD || "",       // "Salima123456" sera injecté ici
+    database: process.env.DB_NAME || "todo"        // "todo" sera injecté ici
 });
+
+// ... reste du code inchangé ...
+
+
+// Create a connection specifying database connection details
+/*const conn = mysql.createConnection({
+    host: "database-1.c26mhczxjjki.us-east-1.rds.amazonaws.com",
+    user: "admin",
+    password: "Salima123456",
+    database: "todo",
+    port: 3306
+});*/
 
 // Establish a connection to the MySQL server using the connection object
 conn.connect(function (err) {
